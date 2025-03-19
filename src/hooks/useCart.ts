@@ -1,13 +1,9 @@
-import { useState } from "react";
-import "./App.css";
+import { useState, useEffect, useMemo } from "react";
+import { db } from "../data/db";
+import type { CartItem, Guitar } from "../types";
 
-import Header from "./components/Header";
-import Guitar from "./components/Guitar";
-import { db } from "./data/db";
-import { useEffect } from "react";
-
-function App() {
-  const initialCart = () => {
+export default function useCart() {
+  const initialCart = () : CartItem []=> {
     const localCart = localStorage.getItem("cart");
     return localCart ? JSON.parse(localCart) : [];
   };
@@ -22,7 +18,7 @@ function App() {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
-  function addToCart(item) {
+  function addToCart(item: Guitar) {
     const itemExists = cart.findIndex((guitar) => guitar.id === item.id);
     if (itemExists >= 0) {
       const updatedCart = [...cart];
@@ -31,16 +27,16 @@ function App() {
         setCart(updatedCart);
       }
     } else {
-      item.quantity = 1;
-      setCart([...cart, item]);
+      const newItem : CartItem = {...item, quantity: 1};
+      setCart([...cart, newItem]);
     }
   }
 
-  function removeFromCart(id) {
+  function removeFromCart(id: Guitar["id"]) {
     setCart((prevCart) => prevCart.filter((guitar) => guitar.id !== id));
   }
 
-  function increaseQuantity(id) {
+  function increaseQuantity(id: Guitar["id"]) {
     const updatedCart = cart.map((guitar) => {
       if (guitar.id === id && guitar.quantity < MAX_ITEMS) {
         return {
@@ -53,7 +49,7 @@ function App() {
     setCart(updatedCart);
   }
 
-  function decreaseQuantity(id) {
+  function decreaseQuantity(id: Guitar["id"]) {
     const updatedCart = cart.map((guitar) => {
       if (guitar.id === id && guitar.quantity > MIN_ITEMS) {
         return {
@@ -70,38 +66,22 @@ function App() {
     setCart([]);
   }
 
-  return (
-    <>
-      <Header
-        cart={cart}
-        removeFromCart={removeFromCart}
-        increaseQuantity={increaseQuantity}
-        decreaseQuantity={decreaseQuantity}
-        clearCart={clearCart}
-      />
-
-      <main className="container-xl mt-5">
-        <h2 className="text-center">Nuestra Colección</h2>
-
-        <div className="row mt-5">
-          {data.map((guitar) => (
-            <Guitar
-              key={guitar.id}
-              guitar={guitar}
-              setCart={setCart}
-              addToCart={addToCart}
-            />
-          ))}
-        </div>
-      </main>
-
-      <footer className="bg-dark mt-5 py-5">
-        <div className="container-xl">
-          <p className="text-white text-center fs-4 mt-4 m-md-0">GuitarLA</p>
-        </div>
-      </footer>
-    </>
+  // state Derivado
+  const isEmpty = useMemo(() => cart.length === 0, [cart]);
+  const cartTotal = useMemo(
+    () => cart.reduce((total, item) => total + item.price * item.quantity, 0),
+    [cart]
   );
-}
 
-export default App;
+  return {
+    data,
+    cart,
+    addToCart,
+    removeFromCart,
+    increaseQuantity,
+    decreaseQuantity,
+    clearCart,
+    isEmpty,
+    cartTotal,
+  };
+}

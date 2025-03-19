@@ -19,10 +19,10 @@ importers:
         specifier: ^9.11.1
         version: 9.12.0
       '@types/react':
-        specifier: ^18.3.10
+        specifier: ^18.3.11
         version: 18.3.11
       '@types/react-dom':
-        specifier: ^18.3.0
+        specifier: ^18.3.1
         version: 18.3.1
       '@vitejs/plugin-react-swc':
         specifier: ^3.5.0
@@ -42,6 +42,9 @@ importers:
       globals:
         specifier: ^15.9.0
         version: 15.11.0
+      typescript:
+        specifier: ^5.8.2
+        version: 5.8.2
       vite:
         specifier: ^5.4.8
         version: 5.4.9
@@ -1100,6 +1103,11 @@ packages:
   typed-array-length@1.0.6:
     resolution: {integrity: sha512-/OxDN6OtAk5KBpGb28T+HZc2M+ADtvRxXrKKbUwtsLgdoxgX13hyy7ek6bFRl5+aBs2yZzB0c4CnQfAtVypW/g==}
     engines: {node: '>= 0.4'}
+
+  typescript@5.8.2:
+    resolution: {integrity: sha512-aJn6wq13/afZp/jT9QZmwEjDqqvSGp1VT5GVg+f/t6/oVyrgXM6BY1h9BRh/O5p3PlUPAe+WuiEZOmb/49RqoQ==}
+    engines: {node: '>=14.17'}
+    hasBin: true
 
   unbox-primitive@1.0.2:
     resolution: {integrity: sha512-61pPlCD9h51VoreyJ0BReideM3MDKMKnh6+V9L08331ipq6Q8OFXZYiqP6n/tbHx4s5I9uRhcye6BrbkizkBDw==}
@@ -2309,6 +2317,8 @@ snapshots:
       has-proto: 1.0.3
       is-typed-array: 1.1.13
       possible-typed-array-names: 1.0.0
+
+  typescript@5.8.2: {}
 
   unbox-primitive@1.0.2:
     dependencies:
